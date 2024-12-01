@@ -1,1 +1,1 @@
-(https://mr-mono.github.io/index.html)
+https://mr-mono.github.io/index.html
