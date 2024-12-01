@@ -1,1 +1,1 @@
-https://noobiecoderlol.github.io/Snake-game-KREP/
+https://mr-mono.github.io/Snake-game-KREP/
