@@ -1,0 +1,197 @@
+/* Basic styling */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: black;  /* Set background to black */
+    
+    /* Background image settings */
+    background-image: url('https://raw.githubusercontent.com/Noobiecoderlol/Snake-game-KREP/main/Background.jpg'); /* Correct raw URL */
+    background-size: cover; /* Cover the entire viewport */
+    background-position: center center; /* Center the image */
+    background-attachment: fixed; /* Keeps the image fixed while scrolling */
+    color: white; /* Adjust text color for better visibility */
+    background-repeat: no-repeat; /* Prevent background repetition */
+    overflow: hidden; /* Prevent scrolling */
+}
+
+/* Media query to handle mobile screens */
+@media (max-width: 768px) {
+    body {
+        background-attachment: scroll; /* Disable fixed background for mobile devices to improve performance */
+    }
+
+    #game-container {
+        display: flex;                /* Center game container */
+        justify-content: center;      /* Center horizontally */
+        align-items: center;          /* Center vertically */
+        width: 100%;                  /* Full viewport width */
+        height: 100vh;                /* Full viewport height */
+        padding: 0;                   /* Remove any extra padding */
+    }
+
+    canvas {
+        width: 90vw;                  /* Adjust canvas width */
+        height: 90vw;                 /* Maintain square aspect ratio */
+        max-width: 100%;              /* Ensure it doesn't overflow */
+        max-height: 100%;             /* Keep within viewport */
+    }
+}
+
+/* Rest of your existing styles */
+
+#title-container {
+    text-align: center;
+    margin-bottom: 20px; /* Space between title and links */
+}
+
+#title-container h1 {
+    font-size: 36px;
+    margin: 0;
+    
+    /* Rainbow gradient text effect */
+    background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+    -webkit-background-clip: text; /* For Chrome, Safari, and newer versions of Edge */
+    color: transparent; /* Make the text transparent so the background gradient shows */
+}
+
+#links-container {
+    position: relative;
+    margin-top: 10px;  /* Space between title and links */
+    font-size: 14px;
+    color: #333;
+    text-align: center; /* Center-align the links */
+    background-color: #333; /* Darker background for links section */
+    padding: 10px; /* Padding around the links */
+    border-radius: 5px; /* Rounded corners for the links container */
+}
+
+#links-container a {
+    color: #ffffff; /* White color for the links */
+    text-decoration: none;
+    margin-bottom: 10px;
+    font-weight: bold;
+    display: block;  /* Make links block-level for vertical stacking */
+}
+
+#links-container a:hover {
+    color: #ff6600; /* Orange hover effect for better visibility */
+}
+
+.text-link {
+    font-size: 18px;  /* Adjust text size */
+    margin-bottom: 10px;
+}
+
+/* Score section */
+#score-container {
+    margin-top: 10px;
+    font-size: 18px;
+    color: white; /* Set the score text color to white */
+    background-color: #808080;  /* Grey background for the scoreboard */
+    padding: 10px 20px;  /* Padding to make the text more readable */
+    border-radius: 5px;  /* Optional: Adds rounded corners */
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);  /* Optional: Adds a subtle shadow for depth */
+    text-align: center;  /* Center the text */
+}
+
+/* Game container for dynamic resizing */
+#game-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 640px;  /* Default width for canvas */
+    height: 640px; /* Default height for canvas */
+    max-width: 100vw;
+    max-height: 100vh;
+    padding: 0;
+    overflow: hidden; /* Prevent overflow */
+    box-sizing: border-box; /* Prevent padding from increasing the size */
+    margin: 0 auto;  /* Center the game container */
+}
+
+/* Canvas styling */
+canvas {
+    width: 520px; /* Match the width specified in the HTML */
+    height: 520px; /* Match the height specified in the HTML */
+    border: 2px solid black;
+    display: block;
+    background-color: white;
+}
+
+
+/* Game over message container */
+#game-over-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: red;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column; /* Stack the text vertically */
+    justify-content: center;
+    align-items: center;
+}
+
+#game-over-message {
+    margin-bottom: 10px; /* Space between "Game over!" and "You win!" */
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#you-win-message {
+    margin-bottom: 20px; /* Space between "You win!" and "But I still like you" */
+    font-size: 20px;
+}
+
+#but-i-still-like-you {
+    font-size: 18px;
+    font-style: italic;
+}
+
+#reset-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-align: center; /* Centers the text horizontally */
+    line-height: 1.4; /* Adjust line height for the vertical stack */
+    font-weight: bold; /* Makes the text bold */
+    white-space: normal; /* Allows the text to wrap to new lines */
+}
+
+#reset-button:hover {
+    background-color: #45a049;
+}
+
+/* Add a bit of animation for fun */
+@keyframes buttonTextAnimation {
+    0% {
+        color: white;
+        transform: scale(1);
+    }
+    50% {
+        color: #FFD700; /* Change color to gold */
+        transform: scale(1.2); /* Slightly increase size */
+    }
+    100% {
+        color: white;
+        transform: scale(1);
+    }
+}
+
+#reset-button {
+    animation: buttonTextAnimation 2s ease-in-out infinite; /* Loop the animation */
+}
