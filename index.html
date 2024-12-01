@@ -3,102 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Krep Bipolar Degen</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Snake Game</title>
+    <style>
+        /* Basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: black; /* Set background to black */
+            background-image: url('https://raw.githubusercontent.com/Noobiecoderlol/Snake-game-KREP/main/Background.jpg');
+            background-size: cover; /* Cover the entire viewport */
+            background-position: center center; /* Center the image */
+            background-attachment: fixed; /* Keeps the image fixed while scrolling */
+            color: white; /* Adjust text color for better visibility */
+            background-repeat: no-repeat; /* Prevent background repetition */
+            overflow: hidden; /* Prevent scrolling */
+        }
+
+        @media (max-width: 768px) {
+            body {
+                background-attachment: scroll;
+            }
+
+            #game-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100vh;
+                padding: 0;
+            }
+
+            canvas {
+                width: 90vw;
+                height: 90vw;
+                max-width: 100%;
+                max-height: 100%;
+            }
+        }
+
+        #game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 640px;
+            height: 640px;
+            max-width: 100vw;
+            max-height: 100vh;
+            padding: 0;
+            overflow: hidden;
+            box-sizing: border-box;
+            margin: 0 auto;
+        }
+
+        canvas {
+            width: 520px;
+            height: 520px;
+            border: 2px solid black;
+            background-color: white;
+        }
+
+        #score-container {
+            margin-top: 10px;
+            font-size: 18px;
+            color: white;
+            background-color: #808080;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <!-- Title of the game placed above the canvas -->
-    <div id="title-container">
-        <h1>Krep Bipolar Degen</h1>
+    <div id="game-container">
+        <canvas width="520" height="520"></canvas>
+        <div id="score-container">Score: 0</div>
     </div>
-
-    <!-- Controls message -->
-    <div id="controls-message" style="display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); color: white; flex-direction: column; justify-content: center; align-items: center; z-index: 1000;">
-        <h1>Welcome Kreptard! the Degen</h1>
-        <p>Use the arrow keys on your keyboard to control the snake:</p>
-        <ul>
-            <li>hurrr, durrr</li>
-            <li>Me smart, Me play game now?</li>
-        </ul>
-        <button id="start-game-button" style="margin-top: 20px; padding: 10px 20px; font-size: 18px;">DONT Start</button>
-    </div>
-
-    <!-- Links Section below the game title -->
-    <div id="links-container">
-        <a href="#" id="contact-link">Contract address</a>
-        <a href="https://dexscreener.com/solana/adxbwlqk1m7rlprbi8mmfyxqu7hqandgq9c5t8zmbyll" target="_blank" class="text-link">Dexscreener</a>
-        <a href="https://t.me/krepstaonsol" target="_blank" class="text-link">Telegram</a>
-        <a href="https://x.com/kreponsolbackup" target="_blank">X</a>
-    </div>
-
-    <!-- Score displayed below the title -->
-    <div id="score-container" style="display: none;">
-        <span id="score">Score: 0</span>
-    </div>
-
-    <!-- Game area and Game Over message -->
-    <div id="game-container" style="display: none;">
-        <canvas id="game-board" width="520" height="520"></canvas>
-
-        <!-- Game Over and Reset Section -->
-        <div id="game-over-container" style="display: none;">
-            <p id="game-over-message">Game over</p>
-            <p id="you-win-message">->Shitty player detected!<-</p>
-            <button id="reset-button" onclick="resetGame()">PLEASE don't play again!</button>
-        </div>
-    </div>
-
-    <!-- Add JavaScript -->
     <script>
-// Handle the Start Game button
-document.getElementById("start-game-button").addEventListener("click", function () {
-    const controlsMessage = document.getElementById("controls-message");
-    const gameContainer = document.getElementById("game-container");
-    const scoreContainer = document.getElementById("score-container");
-    const linksContainer = document.getElementById("links-container");
+        // JavaScript Code
+        const canvas = document.querySelector("canvas");
+        const ctx = canvas.getContext("2d");
+        const gridSize = 20;
+        const canvasSize = 520;
+        const snake = [{ x: gridSize * 2, y: gridSize * 2 }];
+        let food = { x: 0, y: 0 };
+        let dx = gridSize;
+        let dy = 0;
+        let score = 0;
+        let gameInterval;
 
-    // Hide the controls message
-    controlsMessage.style.display = "none";
+        function generateFood() {
+            food.x = Math.floor(Math.random() * (canvasSize / gridSize)) * gridSize;
+            food.y = Math.floor(Math.random() * (canvasSize / gridSize)) * gridSize;
+        }
 
-    // Hide the links container when the game starts
-    linksContainer.style.display = "none";
+        function checkCollision() {
+            const head = snake[0];
 
-    // Show the game area and score
-    gameContainer.style.display = "block";
-    scoreContainer.style.display = "block";
+            if (head.x < 0 || head.x >= canvasSize || head.y < 0 || head.y >= canvasSize) {
+                return true;
+            }
 
-// Show the links container after the game starts
-    linksContainer.style.display = "block";
+            for (let i = 1; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    return true;
+                }
+            }
 
-    // Start the game
-    startGame();
-});
+            return false;
+        }
 
-// Hide the links container on page load
-window.onload = function() {
-    const linksContainer = document.getElementById("links-container");
-    linksContainer.style.display = "none";
-};
+        function update() {
+            const head = { x: snake[0].x + dx, y: snake[0].y + dy };
 
+            snake.unshift(head);
 
+            if (head.x === food.x && head.y === food.y) {
+                score++;
+                document.getElementById("score-container").innerText = `Score: ${score}`;
+                generateFood();
+            } else {
+                snake.pop();
+            }
 
-        // Handle copying the contract address
-        document.getElementById("contact-link").addEventListener("click", function (event) {
-            event.preventDefault();
-            const contactAddress = "E31D5EnAFrTgnp3GKzc7LBUbbdgXdz3NRHku4s6DV3NG";
-            const textarea = document.createElement("textarea");
-            textarea.value = contactAddress;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand("copy");
-            document.body.removeChild(textarea);
-            alert("Contract address copied to clipboard: " + contactAddress);
+            if (checkCollision()) {
+                clearInterval(gameInterval);
+                alert(`Game Over! Your score: ${score}`);
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvasSize, canvasSize);
+
+            ctx.fillStyle = "green";
+            snake.forEach(segment => {
+                ctx.fillRect(segment.x, segment.y, gridSize, gridSize);
+            });
+
+            ctx.fillStyle = "red";
+            ctx.fillRect(food.x, food.y, gridSize, gridSize);
+        }
+
+        document.addEventListener("keydown", (event) => {
+            const key = event.key;
+            if (key === "ArrowUp" && dy === 0) {
+                dx = 0;
+                dy = -gridSize;
+            } else if (key === "ArrowDown" && dy === 0) {
+                dx = 0;
+                dy = gridSize;
+            } else if (key === "ArrowLeft" && dx === 0) {
+                dx = -gridSize;
+                dy = 0;
+            } else if (key === "ArrowRight" && dx === 0) {
+                dx = gridSize;
+                dy = 0;
+            }
         });
 
-        // Reset game logic
-        document.getElementById("reset-button").addEventListener("click", resetGame);
-    </script>
+        function gameLoop() {
+            update();
+            draw();
+        }
 
-    <script src="game.js"></script>
+        generateFood();
+        gameInterval = setInterval(gameLoop, 100);
+    </script>
 </body>
 </html>
